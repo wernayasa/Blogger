@@ -1,0 +1,40 @@
+<b:includable id='relatedPostV2'>
+        <ul class='lsn m-0 p-0' id='relatedPostV2'/>
+      <script>
+	var related = new BloggerScript({
+  label: [<b:with value='[&quot;Series&quot;,&quot;Chapter&quot;]' var='chf'>
+        <b:loop index='i' values='data:post.labels' var='item'>&#39;<data:item.name/>&#39;,</b:loop></b:with>],
+  jumlah: 10,
+  noImage: &#39;https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgu__ZMDj4Q-1v-2c50s55Sp0vnfiabiNy7aMqr6nykUKgXi7E_1r6upRUvORBA1eMyO_Iia4dPvWGHJXPdtF1rmY5-dk3ZzFGgT85ia52BAFXiFAPqu3ciwtAu0BHZPwhFaAKe2Gxg7afpv4LRqj_HUf1IuO7uvrXNop0Kqp3-geZv3e0WjYP88OFn/s128/blogger.png&#39;,
+  sizeImage: &#39;s320&#39;
+});
+
+function _related(post) {
+  let html = &#39;<ul class='pl-0 m-0 grid gtc-f141a gg-20 slide rel lsn ul style-2'>&#39;;
+  post.forEach(post =&gt; {
+    let score = post.label.find(i =&gt; !/[^0-9\.-]+/g.test(i)) || post.label.find(i =&gt; i.includes(&#39;Score&#39;))?.split(&#39; &#39;)[1] || &#39;0.0&#39;;
+    let status = post.label.find(i =&gt; [&#39;Ongoing&#39;, &#39;Completed&#39;, &#39;Dropped&#39;, &#39;Cooming Soon&#39;].includes(i)) || false;
+    let tipe = post.label.find(i =&gt; [&#39;Manga&#39;, &#39;Manhwa&#39;, &#39;Manhua&#39;].includes(i)) || false;
+
+    html += &#39;<li><div class='grid gtc-1001fr gg-10'><div class='item-thumbnail imgItem full-i h-220 relative b-img oh'>&#39;;
+
+    status &amp;&amp; (html += `<span class='absolute ong ttu fs-11' style='z-index:1;'>${status}</span>`);
+
+    html += `<a href='${post.link}'><img alt='${post.title}' class='post-thumb lazy' src='${post.image}'/></a>`;
+
+    tipe &amp;&amp; (html += `<span class='absolute po ${tipe.toLowerCase()}'>${tipe}</span>`);
+
+    html += `</div><div class='item-title clamp toe oh block fs-15 lh-20 yt8m ck m-0'><a href='${post.link}'><span>${post.title}</span></a></div>`;
+
+    html += &#39;<div class='rating'><div class='rating-prc'><div class='rtp'><div class='rtb'>&#39;;
+    html += `<span style='width:${score.length == 4 ? score == &apos;10.0&apos; ? score.replace(&apos;.&apos;, &apos;&apos;) : score.replace(&apos;.&apos;, &apos;&apos;).slice(0, -1) : score.replace(&apos;.&apos;, &apos;&apos;)}%'/>`;
+    html += `</div></div><div class='num' content='${score}'>${score}</div></div></div>`;
+
+    html += &#39;</div></li>&#39;;
+  });
+  html += &#39;</ul>&#39;;
+
+  document.getElementById(&#39;relatedPostV2&#39;).innerHTML = html;
+}
+related.relatedPost(_related);
+</script>
